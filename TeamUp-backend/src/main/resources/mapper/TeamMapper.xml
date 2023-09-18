@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aoshen.usercenter.mapper.TeamMapper">
+
+    <resultMap id="BaseResultMap" type="com.aoshen.usercenter.model.domain.Team">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="maxNum" column="maxNum" jdbcType="INTEGER"/>
+            <result property="expireTime" column="expireTime" jdbcType="TIMESTAMP"/>
+            <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,description,
+        maxNum,expireTime,userId,
+        status,password,createTime,
+        updateTime,isDelete
+    </sql>
+
+    <select id="selectJoinUsers" resultType="com.aoshen.usercenter.model.domain.User">
+        select u.id,username,userAccount,avatarUrl,gender,
+               userPassword,phone,email,userStatus,
+               tags,profile,u.createTime,
+               u.updateTime,u.isDelete,userRole,planetCode
+        from
+            team t left join user_team ut on t.id = ut.teamId
+                   left join user u on ut.userId = u.id
+        where teamId = #{id} and t.isDelete = 0 and ut.isDelete = 0 and u.isDelete = 0
+    </select>
+</mapper>
